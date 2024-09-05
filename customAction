@@ -1,0 +1,57 @@
+// Automatic FlutterFlow imports
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/custom_code/actions/index.dart'; // Imports other custom actions
+import '/flutter_flow/custom_functions.dart'; // Imports custom functions
+import 'package:flutter/material.dart';
+// Begin custom action code
+// DO NOT REMOVE OR MODIFY THE CODE ABOVE!
+
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+
+Future<FFUploadedFile> pdfGenerator(
+  String title,
+  String messege,
+) async {
+  // Add your function code here!
+  final pdf = pw.Document();
+  pdf.addPage(
+    pw.Page(
+        pageFormat: PdfPageFormat.a5,
+        margin: pw.EdgeInsets.all(32),
+        build: (pw.Context context) {
+          //main content of pdf creation is started here
+          return pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.SizedBox(height: 10),
+                pw.Text(title,
+                    style: pw.TextStyle(
+                      fontSize: 12,
+                      color: PdfColors.blue,
+                    )),
+                pw.SizedBox(height: 10),
+                pw.Divider(thickness: 2),
+                pw.Text(messege,
+                    style: pw.TextStyle(
+                      fontSize: 12,
+                      color: PdfColors.red,
+                    )),
+                pw.SizedBox(height: 10),
+                pw.Divider(thickness: 2),
+                pw.TableHelper.fromTextArray(context: context, data: [
+                  ['Item', 'Rs'],
+                  ['Jeans', '1000.0'],
+                  ['T-shirt', '329.0'],
+                  ['Formal', '439.9'],
+                  ['Oversized', '799.9'],
+                ])
+              ]);
+        }),
+  );
+
+  final Uint8List pdfBytes = await pdf.save();
+  final uploadedFile = FFUploadedFile(bytes: pdfBytes, name: 'sample.pdf');
+  return uploadedFile;
+}
